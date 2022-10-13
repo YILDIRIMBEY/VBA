@@ -1,0 +1,51 @@
+  Sub kopyala(ByVal isim As String)
+  Dim xConnect As Object
+   Application.DisplayAlerts = False
+    'Sheets.Copy
+    If Dir(ThisWorkbook.Path & "\data\" & Format(Now, "yyyy") & "\", vbDirectory) = "" Then
+    MkDir (ThisWorkbook.Path & "\data\" & Format(Now, "yyyy") & "\")
+    End If
+    If Dir(ThisWorkbook.Path & "\data\" & Format(Now, "yyyy") & "\" & Format(Now, "mm") & "\", vbDirectory) = "" Then
+    MkDir (ThisWorkbook.Path & "\data\" & Format(Now, "yyyy") & "\" & Format(Now, "mm") & "\")
+    End If
+    
+    ActiveSheet.Copy
+    ActiveWorkbook.SaveAs Filename:=ThisWorkbook.Path & "\data\" & Format(Now, "yyyy") & "\" & Format(Now, "mm") & "\" & isim & ".xlsx", FileFormat:=xlWorkbookDefault
+    'xlWorkbookDefault 'xlOpenXMLWorkbookMacroEnabled
+    'ActiveWorkbook.SaveCopyAs (ThisWorkbook.Path & "\data\" & isim & ".xls")
+
+For Each xConnect In ActiveWorkbook.Connections
+'If xConnect.Name <> "ThisWorkbookDataModel" Then
+xConnect.Delete
+Next xConnect
+    ActiveWorkbook.Save
+    ActiveWorkbook.Close
+    Application.DisplayAlerts = True
+    End Sub
+    
+    
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim KeyCells As Range
+    Dim dosyaismi As String
+    Dim sonkaydedilme As String
+    Dim resizedTable As ListObject
+    
+    
+'If (sonkaydedilme <> Format(Now, "yyyy-mm-dd-hh-mm")) Or (Len(sonkaydedilme) = 0) Then
+   'Set KeyCells = ListObjects("Tablo_siparislistesi")
+   '.Range With Resize.Range.Resize(.Range.Rows.Count - 1, .Range.Columns.Count)
+
+'Set resizedTable = ListObjects("Tablo_siparislistesi")
+'resizedTable.Range.Rows.Count
+'With Resize(Rows.Count - 1, Columns.Count)
+
+If Not Application.Intersect(Range("A1", "o2"), Range(Target.Address)) Is Nothing Then
+
+'sonkaydedilme = Format(Now, "yyyy-mm-dd-hh-mm")
+'MsgBox "Cell " & Target.Address & " has changed."
+dosyaismi = Format(Now, "yyyy-mm-dd-hh-mm-ss")
+kopyala ("yedek-" & dosyaismi)
+'End If
+End If
+End Sub
